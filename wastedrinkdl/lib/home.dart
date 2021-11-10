@@ -1,8 +1,36 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:wastedrinkdl/camera.dart';
+import 'package:image_picker/image_picker.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  File? _image;
+
+  Future _pickImage({required source}) async {
+    try {
+      final ImagePicker _picker = ImagePicker();
+      final _pickedImage = await _picker.pickImage(source: source);
+
+      if (_pickedImage == null) return;
+      setState(() {
+        _image = File(_pickedImage.path);
+        print("image: $_image");
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(const SnackBar(
+            content: Text("อัพโหลดรูปภาพไม่สำเร็จ กรุณาลองอีกครั้ง")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +104,10 @@ class HomePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 15),
                     InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CameraPage()));
+                      onTap: () async {
+                        // _pickImage(source: ImageSource.camera);
+                        _pickImage(source: ImageSource.gallery);
+                        // Navigator.pop(context);
                       },
                       child: Card(
                         elevation: 2,
