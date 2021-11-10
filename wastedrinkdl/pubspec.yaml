@@ -30,7 +30,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -55,6 +54,13 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
+  fonts:
+    - family: Quicksand
+      fonts:
+        - asset: assets/font/Quicksand-Bold.otf
+          weight: 700
+  assets:
+    - assets/
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
