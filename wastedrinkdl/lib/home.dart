@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:wastedrinkdl/camera.dart';
+import 'package:wastedrinkdl/result.dart';
 import 'package:image_picker/image_picker.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  File? _image;
 
   Future _pickImage({required source}) async {
     try {
@@ -20,10 +19,11 @@ class _HomePageState extends State<HomePage> {
       final _pickedImage = await _picker.pickImage(source: source);
 
       if (_pickedImage == null) return;
-      setState(() {
-        _image = File(_pickedImage.path);
-        print("image: $_image");
-      });
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ResultPage(image: File(_pickedImage.path))));
     } catch (e) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Container(
               width: double.infinity,
-              height: 180,
+              height: 140,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
                 boxShadow: const [
@@ -75,12 +75,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 20),
                     InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CameraPage()));
-                      },
+                      onTap: () => _pickImage(source: ImageSource.camera),
                       child: Card(
                         elevation: 2,
                         color: const Color(0xFFFAEDCA),
@@ -104,11 +99,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 15),
                     InkWell(
-                      onTap: () async {
-                        // _pickImage(source: ImageSource.camera);
-                        _pickImage(source: ImageSource.gallery);
-                        // Navigator.pop(context);
-                      },
+                      onTap: () => _pickImage(source: ImageSource.gallery),
                       child: Card(
                         elevation: 2,
                         color: const Color(0xFFFAEDCA),
