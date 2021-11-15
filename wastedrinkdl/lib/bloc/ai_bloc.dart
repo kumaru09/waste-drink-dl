@@ -20,7 +20,10 @@ class AiBloc extends Bloc<AiEvent, AiState> {
       if (state.status == AiStatus.success) {
         emit(state.copyWith(status: AiStatus.initial));
       }
-      final res = await aiRepositpry.prediction(event.file);
+      var res = await aiRepositpry.prediction(event.file);
+      if (res == 'AluCan') {
+        res = 'CAN';
+      }
       emit(state.copyWith(status: AiStatus.success, result: res));
     } catch (e) {
       emit(state.copyWith(status: AiStatus.failure));

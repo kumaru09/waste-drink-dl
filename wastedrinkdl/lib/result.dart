@@ -56,7 +56,7 @@ class _ResultPageState extends State<ResultPage> {
                     child: Center(
                       child: state.status == AiStatus.success
                           ? Text(
-                              'CAN',
+                              state.result!,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline6!
