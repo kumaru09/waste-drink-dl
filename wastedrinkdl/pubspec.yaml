@@ -38,6 +38,7 @@ dependencies:
   extension_google_sign_in_as_googleapis_auth: ^2.0.4
   flutter_bloc: ^7.3.3
   dio: ^4.0.3
+  equatable: ^2.0.3
 
 dev_dependencies:
   flutter_test:

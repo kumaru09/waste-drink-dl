@@ -1,11 +1,23 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wastedrinkdl/bloc/ai_bloc.dart';
 
-class ResultPage extends StatelessWidget {
+class ResultPage extends StatefulWidget {
   const ResultPage({Key? key, required this.image}) : super(key: key);
 
   final File image;
+  @override
+  _ResultPageState createState() => _ResultPageState();
+}
+
+class _ResultPageState extends State<ResultPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AiBloc>().add(GetPrediction(file: widget.image));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,25 +43,33 @@ class ResultPage extends StatelessWidget {
               Expanded(
                 child: SizedBox(
                   width: double.infinity,
-                  child: Image.file(image, fit: BoxFit.cover),
+                  child: Image.file(widget.image, fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(height: 20),
-              Card(
-                margin: const EdgeInsets.all(0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 120,
-                  child: Center(
-                    child: Text(
-                      'CAN',
-                      style: Theme.of(context).textTheme.headline6!.merge(
-                          TextStyle(
-                              color: Theme.of(context).colorScheme.secondary)),
+              BlocBuilder<AiBloc, AiState>(builder: (context, state) {
+                return Card(
+                  margin: const EdgeInsets.all(0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 120,
+                    child: Center(
+                      child: state.status == AiStatus.success
+                          ? Text(
+                              'CAN',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6!
+                                  .merge(TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary)),
+                            )
+                          : const CircularProgressIndicator(),
                     ),
                   ),
-                ),
-              ),
+                );
+              })
             ],
           ),
         ),

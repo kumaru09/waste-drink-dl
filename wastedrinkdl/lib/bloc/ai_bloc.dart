@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:wastedrinkdl/repositories/ai_repository.dart';
 
@@ -8,7 +9,7 @@ part 'ai_event.dart';
 part 'ai_state.dart';
 
 class AiBloc extends Bloc<AiEvent, AiState> {
-  AiBloc(this.aiRepositpry) : super(AiState()) {
+  AiBloc(this.aiRepositpry) : super(const AiState()) {
     on<GetPrediction>(predictions);
   }
 
@@ -16,10 +17,12 @@ class AiBloc extends Bloc<AiEvent, AiState> {
 
   Future<void> predictions(GetPrediction event, Emitter<AiState> emit) async {
     try {
-      await aiRepositpry.prediction(event.file);
-      emit(state.copyWith(status: AiStatus.success));
+      if (state.status == AiStatus.success) {
+        emit(state.copyWith(status: AiStatus.initial));
+      }
+      final res = await aiRepositpry.prediction(event.file);
+      emit(state.copyWith(status: AiStatus.success, result: res));
     } catch (e) {
-      print('$e');
       emit(state.copyWith(status: AiStatus.failure));
     }
   }
