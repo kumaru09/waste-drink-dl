@@ -12,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   Future _pickImage({required source}) async {
     try {
       final ImagePicker _picker = ImagePicker();
